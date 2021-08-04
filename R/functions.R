@@ -9,6 +9,7 @@
 
 #-------------------------------------------------------------------------------
 #' @title  fars_read
+#'
 #' @description
 #' Function to read data from data from the US National Highway Traffic Safety
 #' Administration's Fatality Analysis Reporting System, which is a nationwide
@@ -20,7 +21,9 @@
 #' @return tibble with the readed data
 #'
 #' @examples
-#' fars_read('./data/accident_2013.csv.bz2')
+#' \dontrun{
+#' fars_read('./data-raw/accident_2013.csv.bz2')
+#' }
 #' @export
 fars_read <- function(filename) {
         if(!file.exists(filename))
@@ -28,7 +31,7 @@ fars_read <- function(filename) {
         data <- suppressMessages({
                 readr::read_csv(filename, progress = FALSE)
         })
-        dplyr::tbl_df(data)
+        dplyr::as_tibble(data)
 }
 
 #-------------------------------------------------------------------------------
@@ -40,24 +43,23 @@ fars_read <- function(filename) {
 #'
 #' @return character with the name of the file (with extenion .csv.bz2)
 #'
-#' @details
-#'
 #' @examples
+#' \dontrun{
 #' make_filename(2000)
-#'
+#' }
 #' @export
 make_filename <- function(year) {
         year <- as.integer(year)
-        sprintf("accident_%d.csv.bz2", year)
+        sprintf("/data-raw/accident_%d.csv.bz2", year)
 }
 
 #-------------------------------------------------------------------------------
-#' @title  fars_read
+#' @title  fars_read_years
 #'
 #' @description
 #' This function returns a list of the tibbles from years founded in data.
 #'
-#' @param vector years to find data
+#' @param years years to find data
 #'
 #' @return List of tibbles with two fields: MONTH and year. If year not in data
 #' a warning message will be printed
@@ -67,9 +69,10 @@ make_filename <- function(year) {
 #' The data in csv.bz2 format need to be in the working directory
 #'
 #' @examples
+#' \dontrun{
 #' x <- fars_read_years(c(2000,2013,2015, 2021))
 #' x[[2]]$MONTH
-#'
+#' }
 #' @export
 fars_read_years <- function(years) {
         lapply(years, function(year) {
@@ -86,14 +89,14 @@ fars_read_years <- function(years) {
 }
 
 #-------------------------------------------------------------------------------
-#' @title  fars_read
+#' @title  fars_summarize_years
 #'
 #' @description
 #' Function summarize data from different source files into one tibble containing
 #' months in rows and the number of register by month and year. If a year from the vector
 #' is not listed It will kept out of the tibble
 #'
-#' @param vector years to find data
+#' @param years vector with years to find data
 #'
 #' @return Single tibble with the sum of registers by month and year
 #'
@@ -102,8 +105,9 @@ fars_read_years <- function(years) {
 #' The data in csv.bz2 format need to be in the working directory
 #'
 #' @examples
+#' \dontrun{
 #' x <- fars_summarize_years(c(2000,2013,2015, 2021))
-#' x
+#' }
 #' @export
 fars_summarize_years <- function(years) {
         dat_list <- fars_read_years(years)
@@ -114,7 +118,7 @@ fars_summarize_years <- function(years) {
 }
 
 #-------------------------------------------------------------------------------
-#' @title  fars_read
+#' @title  fars_map_state
 #'
 #' @description This function return a plot with the state limits and the coordinates of the cases within it
 #'
@@ -123,16 +127,10 @@ fars_summarize_years <- function(years) {
 #'
 #' @return plot with the state and coordinates of the data
 #'
-#' @details
-#'
 #' @examples
-#' x <- fars_map_state(1, 2000)
-#' > error file 'accident_2000.csv.bz2' does not exist
-#'
-#' x <- fars_map_state(1, 2013)
-#'
-#' x <- fars_map_state(250, 2013)
-#' > Error in fars_map_state(250, 2013) : invalid STATE number: 250
+#' \dontrun{
+#' fars_map_state(1, 2013)
+#' }
 #' @export
 fars_map_state <- function(state.num, year) {
         filename <- make_filename(year)
@@ -154,7 +152,3 @@ fars_map_state <- function(state.num, year) {
                 graphics::points(LONGITUD, LATITUDE, pch = 46)
         })
 }
-
-#--------------------------------------------------------------------------------
-# TRYOUT
-
