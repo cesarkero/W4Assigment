@@ -1,8 +1,8 @@
 ---
-title: "Details"
+title: "Try"
 output: rmarkdown::html_vignette
 vignette: >
-  %\VignetteIndexEntry{Details}
+  %\VignetteIndexEntry{Try}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---
@@ -10,11 +10,13 @@ vignette: >
 ```{r, include = FALSE}
 knitr::opts_chunk$set(
   collapse = TRUE,
-  comment = "#>",
-  message = FALSE
+  comment = "#>"
 )
 ```
 
+```{r setup}
+# library(W4Assigment)
+```
 
 The purpose of this assessment is for you to combine your skills of creating, writing, documenting, and testing an R package with releasing that package on GitHub. In this assessment you'll be taking the R files from Week 2's assessment about documentation and putting that file in an R package. 
 
@@ -27,21 +29,14 @@ For this assessment you must
  - Once your package has built on Travis and the build is passing with no errors, warnings, or -  - notes you should add your Travis badge to the README.md file of your package repository.
 
 ## 1. Write vignette
-```{r setup}
-library(devtools)
-library(testthat)
-# use_vignette("details")
-```
+Use `use_vignette("Try")`.
 
 ## 2. Write one test
-Test file is located in `./test/test.r`
+Test file is located in `./test/test.r`.
 
 ## 3. Put package on GitHub
 Package was uploaded manualy to github (using github desktop for ubuntu)
 
 ## 4. Set up Travis
-
-```{r}
-use_travis()
-```
+Just execute any of these function `use_travis()` or `use_github_actions()`
 
